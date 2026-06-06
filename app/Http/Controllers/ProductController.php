@@ -12,7 +12,7 @@ class ProductController extends Controller
         // Mengambil semua data produk dari database
         $products = Product::all();
         
-        // Mengirim data ke tampilan (view) bernama 'products.index'
-        return view('products.index', compact('products'));
+        // Ubah 'products.index' menjadi 'welcome'
+        return view('welcome', compact('products'));
     }
 }
