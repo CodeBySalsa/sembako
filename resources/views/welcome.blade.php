@@ -13,6 +13,8 @@
     cartOpen: false, 
     checkoutOpen: false,
     detailOpen: false,
+    selectedWeight: 5,         // <--- TAMBAHKAN INI
+    weights: [5, 10, 25, 50],  // <--- TAMBAHKAN INI
     checkoutItem: null,
     detailItem: null,
     nama: '', alamat: '', no_hp: '', 
@@ -170,19 +172,36 @@
         </div>
     </div>
 
-    <div x-show="detailOpen" x-cloak class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+   <div x-show="detailOpen" x-cloak class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
         <img :src="'{{ asset('images/') }}/' + detailItem?.gambar" class="w-full h-40 object-cover rounded-2xl mb-4">
         
         <h2 class="text-2xl font-black mb-1" x-text="detailItem?.nama"></h2>
-        <p class="text-gray-500 text-sm mb-4">Stok: <span class="font-bold" x-text="detailItem?.stok"></span></p>
+        
+        <div class="my-4">
+            <p class="text-sm font-bold text-gray-600 mb-2">Pilih Berat:</p>
+            <div class="grid grid-cols-4 gap-2">
+                <template x-for="w in weights" :key="w">
+                    <button @click="selectedWeight = w" 
+                            :class="selectedWeight === w ? 'bg-green-600 text-white' : 'bg-gray-100'"
+                            class="py-2 rounded-lg font-bold text-xs transition" 
+                            x-text="w + 'kg'">
+                    </button>
+                </template>
+            </div>
+        </div>
         
         <div class="bg-gray-50 p-4 rounded-xl mb-6">
             <p class="text-gray-700 text-sm" x-text="detailItem?.deskripsi"></p>
-            <p class="text-green-600 font-bold mt-2">Rp <span x-text="detailItem?.harga.toLocaleString()"></span></p>
+            <p class="text-green-600 font-bold mt-2">
+                Rp <span x-text="(detailItem?.harga * (selectedWeight / 5)).toLocaleString()"></span>
+            </p>
         </div>
         
-        <button @click="addToCart(detailItem); detailOpen = false" class="w-full bg-green-100 text-green-700 py-3 rounded-2xl font-bold mb-2">Masukkan Keranjang</button>
+        <button @click="addToCart({...detailItem, harga: detailItem.harga * (selectedWeight/5), nama: detailItem.nama + ' (' + selectedWeight + 'kg)'}); detailOpen = false" 
+                class="w-full bg-green-600 text-white py-3 rounded-2xl font-bold mb-2">
+            Masukkan Keranjang
+        </button>
         <button @click="openCheckout(detailItem); detailOpen = false" class="w-full bg-green-600 text-white py-3 rounded-2xl font-bold mb-2">Beli Sekarang</button>
         <button @click="detailOpen = false" class="w-full text-gray-400 font-bold">Tutup</button>
     </div>
