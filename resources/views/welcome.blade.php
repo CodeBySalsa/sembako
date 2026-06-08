@@ -9,67 +9,67 @@
     <style>[x-cloak] { display: none !important; }</style>
 </head>
 
-<body class="bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen" x-data="{ 
-    cartOpen: false, 
-    checkoutOpen: false,
-    detailOpen: false,
-    selectedWeight: 5,         // <--- TAMBAHKAN INI
-    weights: [5, 10, 25, 50],  // <--- TAMBAHKAN INI
-    checkoutItem: null,
-    detailItem: null,
-    nama: '', alamat: '', no_hp: '', 
-    cart: [], notify: false,
-    selectedCategory: null,
-    sortBy: 'default',
-    categories: [
-        { nama: 'Beras', file: 'beras.jpg', color: 'bg-orange-100' },
-        { nama: 'Bumbu Masakan', file: 'bumbu.jpg', color: 'bg-yellow-100' },
-        { nama: 'Detergent', file: 'detergent.jpg', color: 'bg-blue-100' },
-        { nama: 'Gula Pasir', file: 'gula.jpg', color: 'bg-pink-100' },
-        { nama: 'Ikan Kaleng', file: 'ikan.jpg', color: 'bg-red-100' },
-        { nama: 'Kecap', file: 'kecap.jpg', color: 'bg-amber-100' },
-        { nama: 'Kopi Saset', file: 'kopi.jpg', color: 'bg-stone-200' },
-        { nama: 'Makanan Ringan', file: 'snack.jpg', color: 'bg-purple-100' },
-        { nama: 'Mie Instant', file: 'mie.jpg', color: 'bg-emerald-100' },
-        { nama: 'Minuman', file: 'minuman.jpg', color: 'bg-cyan-100' },
-        { nama: 'Minyak Goreng', file: 'minyak.jpg', color: 'bg-yellow-200' },
-        { nama: 'Pasta Gigi', file: 'pasta.jpg', color: 'bg-slate-100' }
-    ],
-    addToCart(product) {
-        if(product.stok <= 0) return;
-        let exist = this.cart.find(item => item.id === product.id);
-        if(exist) { exist.qty++; } 
-        else { this.cart.push({...product, qty: 1}); }
-        this.notify = true;
-        setTimeout(() => this.notify = false, 2000);
-    },
-    openDetail(product) {
-        this.detailItem = product;
-        this.detailOpen = true;
-    },
-    openCheckout(product) {
-        this.checkoutItem = product;
-        this.checkoutOpen = true;
-    },
-    get filteredProducts() {
-        let products = [
-            @foreach($products as $product)
-            { 
-                id: {{ $product->id }}, 
-                nama: '{{ $product->nama_produk }}', 
-                harga: {{ $product->harga }}, 
-                kategori: '{{ $product->kategori }}', 
-                gambar: '{{ $product->gambar }}', 
-                stok: {{ $product->stok ?? 0 }}, 
-                deskripsi: '{{ $product->deskripsi ?? 'Belum ada deskripsi untuk produk ini.' }}' 
-            },
-            @endforeach
-        ];
-        if (this.sortBy === 'low') products.sort((a, b) => a.harga - b.harga);
-        if (this.sortBy === 'high') products.sort((a, b) => b.harga - a.harga);
-        return products;
-    }
-}">
+<body class="bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen" 
+    x-data="{ 
+        cartOpen: false, 
+        checkoutOpen: false,
+        detailOpen: false,
+        selectedWeight: 5,
+        weights: [5, 10, 25, 50],
+        checkoutItem: null,
+        detailItem: null,
+        nama: '', alamat: '', no_hp: '', 
+        cart: [], notify: false,
+        selectedCategory: null,
+        sortBy: 'default',
+        rawProducts: [],
+        categories: [
+            { nama: 'Beras', file: 'beras.jpg', color: 'bg-orange-100' },
+            { nama: 'Bumbu Masakan', file: 'bumbu.jpg', color: 'bg-yellow-100' },
+            { nama: 'Detergent', file: 'detergent.jpg', color: 'bg-blue-100' },
+            { nama: 'Gula Pasir', file: 'gula.jpg', color: 'bg-pink-100' },
+            { nama: 'Ikan Kaleng', file: 'ikan.jpg', color: 'bg-red-100' },
+            { nama: 'Kecap', file: 'kecap.jpg', color: 'bg-amber-100' },
+            { nama: 'Kopi Saset', file: 'kopi.jpg', color: 'bg-stone-200' },
+            { nama: 'Makanan Ringan', file: 'snack.jpg', color: 'bg-purple-100' },
+            { nama: 'Mie Instant', file: 'mie.jpg', color: 'bg-emerald-100' },
+            { nama: 'Minuman', file: 'minuman.jpg', color: 'bg-cyan-100' },
+            { nama: 'Minyak Goreng', file: 'minyak.jpg', color: 'bg-yellow-200' },
+            { nama: 'Pasta Gigi', file: 'pasta.jpg', color: 'bg-slate-100' }
+        ],
+        addToCart(product) {
+            if(product.stok <= 0) return;
+            let exist = this.cart.find(item => item.nama === product.nama);
+            if(exist) { exist.qty++; } 
+            else { this.cart.push({...product, qty: 1}); }
+            this.notify = true;
+            setTimeout(() => this.notify = false, 2000);
+        },
+        openDetail(product) {
+            this.detailItem = product;
+            this.selectedWeight = 5;
+            this.detailOpen = true;
+        },
+        openCheckout(product) {
+            this.checkoutItem = product;
+            this.checkoutOpen = true;
+        },
+        get filteredProducts() {
+            let list = this.rawProducts.map(p => ({
+                id: p.id,
+                nama: p.nama_produk,
+                harga: parseInt(p.harga),
+                kategori: p.kategori,
+                gambar: p.gambar,
+                stok: parseInt(p.stok || 0),
+                deskripsi: p.deskripsi || 'Belum ada deskripsi untuk produk ini.'
+            }));
+            if (this.sortBy === 'low') list.sort((a, b) => a.harga - b.harga);
+            if (this.sortBy === 'high') list.sort((a, b) => b.harga - a.harga);
+            return list;
+        }
+    }"
+    x-init="rawProducts = {{ json_encode($products) }}">
 
     <div x-show="notify" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
         <div class="bg-white px-8 py-4 rounded-2xl shadow-2xl border-2 border-green-500 flex items-center gap-3">
@@ -90,46 +90,43 @@
         </div>
     </nav>
 
-   <div x-show="cartOpen" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl" @click.away="cartOpen = false">
-        <h2 class="text-xl font-black mb-4">Keranjang Anda</h2>
-        
-        <div class="max-h-80 overflow-y-auto mb-4 space-y-3">
-            <template x-for="(item, index) in cart" :key="item.id">
-                <div class="flex items-center gap-3 border-b pb-3">
-                    <img :src="'{{ asset('images/') }}/' + item.gambar" class="w-16 h-16 object-cover rounded-lg border">
-                    <div class="flex-1">
-                        <h3 class="font-bold text-sm" x-text="item.nama"></h3>
-                        <p class="text-green-600 text-xs">Rp <span x-text="(item.harga * item.qty).toLocaleString()"></span></p>
+    <div x-show="cartOpen" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl" @click.away="cartOpen = false">
+            <h2 class="text-xl font-black mb-4">Keranjang Anda</h2>
+            <div class="max-h-80 overflow-y-auto mb-4 space-y-3">
+                <template x-for="(item, index) in cart" :key="item.nama">
+                    <div class="flex items-center gap-3 border-b pb-3">
+                        <img :src="'{{ asset('images/') }}/' + item.gambar" class="w-16 h-16 object-cover rounded-lg border">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-sm" x-text="item.nama"></h3>
+                            <p class="text-green-600 text-xs">Rp <span x-text="(item.harga * item.qty).toLocaleString()"></span></p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button @click="item.qty > 1 ? item.qty-- : cart.splice(index, 1)" class="bg-gray-100 px-2 py-1 rounded font-bold">-</button>
+                            <span class="font-bold" x-text="item.qty"></span>
+                            <button @click="item.qty++" class="bg-gray-100 px-2 py-1 rounded font-bold">+</button>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button @click="item.qty > 1 ? item.qty-- : cart.splice(index, 1)" class="bg-gray-100 px-2 py-1 rounded font-bold">-</button>
-                        <span class="font-bold" x-text="item.qty"></span>
-                        <button @click="item.qty++" class="bg-gray-100 px-2 py-1 rounded font-bold">+</button>
-                    </div>
+                </template>
+                <p x-show="cart.length === 0" class="text-gray-400 text-center py-4">Keranjang masih kosong.</p>
+            </div>
+            <div x-show="cart.length > 0" class="border-t pt-4 mt-2 mb-4 bg-gray-50 p-3 rounded-2xl">
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-gray-600">Total Harga:</span>
+                    <span class="font-black text-green-700 text-lg">
+                        Rp <span x-text="cart.reduce((total, item) => total + (item.harga * item.qty), 0).toLocaleString()"></span>
+                    </span>
                 </div>
-            </template>
-            <p x-show="cart.length === 0" class="text-gray-400 text-center py-4">Keranjang masih kosong.</p>
-        </div>
-
-        <div x-show="cart.length > 0" class="border-t pt-4 mt-2 mb-4 bg-gray-50 p-3 rounded-2xl">
-            <div class="flex justify-between items-center">
-                <span class="font-bold text-gray-600">Total Harga:</span>
-                <span class="font-black text-green-700 text-lg">
-                    Rp <span x-text="cart.reduce((total, item) => total + (item.harga * item.qty), 0).toLocaleString()"></span>
-                </span>
+            </div>
+            <div class="flex flex-col gap-2">
+                <button @click="cartOpen = false" class="w-full bg-gray-100 py-3 rounded-2xl font-bold">Lanjut Belanja</button>
+                <button @click="if(cart.length > 0) { checkoutItem = {nama: cart.map(i => i.nama + ' ('+i.qty+'x)').join(', ')}; checkoutOpen = true; cartOpen = false; } else { alert('Keranjang kosong!'); }" 
+                        class="w-full bg-green-600 text-white py-3 rounded-2xl font-bold shadow-lg">
+                    Pesan via WhatsApp
+                </button>
             </div>
         </div>
-
-        <div class="flex flex-col gap-2">
-            <button @click="cartOpen = false" class="w-full bg-gray-100 py-3 rounded-2xl font-bold">Lanjut Belanja</button>
-            <button @click="if(cart.length > 0) { checkoutItem = {nama: cart.map(i => i.nama + ' ('+i.qty+'x)').join(', ')}; checkoutOpen = true; cartOpen = false; } else { alert('Keranjang kosong!'); }" 
-                    class="w-full bg-green-600 text-white py-3 rounded-2xl font-bold shadow-lg">
-                Pesan via WhatsApp
-            </button>
-        </div>
     </div>
-</div>
 
     <header class="bg-gradient-to-r from-green-600 to-emerald-500 text-white py-12 shadow-lg">
         <div class="container mx-auto px-4 text-center">
@@ -172,40 +169,36 @@
         </div>
     </div>
 
-   <div x-show="detailOpen" x-cloak class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
-        <img :src="'{{ asset('images/') }}/' + detailItem?.gambar" class="w-full h-40 object-cover rounded-2xl mb-4">
-        
-        <h2 class="text-2xl font-black mb-1" x-text="detailItem?.nama"></h2>
-        
-        <div class="my-4">
-            <p class="text-sm font-bold text-gray-600 mb-2">Pilih Berat:</p>
-            <div class="grid grid-cols-4 gap-2">
-                <template x-for="w in weights" :key="w">
-                    <button @click="selectedWeight = w" 
-                            :class="selectedWeight === w ? 'bg-green-600 text-white' : 'bg-gray-100'"
-                            class="py-2 rounded-lg font-bold text-xs transition" 
-                            x-text="w + 'kg'">
-                    </button>
-                </template>
+    <div x-show="detailOpen" x-cloak class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
+            <img :src="'{{ asset('images/') }}/' + detailItem?.gambar" class="w-full h-40 object-cover rounded-2xl mb-4">
+            <h2 class="text-2xl font-black mb-1" x-text="detailItem?.nama"></h2>
+            <div class="my-4">
+                <p class="text-sm font-bold text-gray-600 mb-2">Pilih Berat:</p>
+                <div class="grid grid-cols-4 gap-2">
+                    <template x-for="w in weights" :key="w">
+                        <button @click="selectedWeight = w" 
+                                :class="selectedWeight === w ? 'bg-green-600 text-white' : 'bg-gray-100'"
+                                class="py-2 rounded-lg font-bold text-xs transition" 
+                                x-text="w + 'kg'">
+                        </button>
+                    </template>
+                </div>
             </div>
+            <div class="bg-gray-50 p-4 rounded-xl mb-6">
+                <p class="text-gray-700 text-sm" x-text="detailItem?.deskripsi"></p>
+                <p class="text-green-600 font-bold mt-2">
+                    Rp <span x-text="(detailItem?.harga * (selectedWeight / 5)).toLocaleString()"></span>
+                </p>
+            </div>
+            <button @click="addToCart({...detailItem, harga: detailItem.harga * (selectedWeight/5), nama: detailItem.nama + ' (' + selectedWeight + 'kg)'}); detailOpen = false" 
+                    class="w-full bg-green-600 text-white py-3 rounded-2xl font-bold mb-2">
+                Masukkan Keranjang
+            </button>
+            <button @click="openCheckout({...detailItem, nama: detailItem.nama + ' (' + selectedWeight + 'kg)'}); detailOpen = false" class="w-full bg-green-600 text-white py-3 rounded-2xl font-bold mb-2">Beli Sekarang</button>
+            <button @click="detailOpen = false" class="w-full text-gray-400 font-bold">Tutup</button>
         </div>
-        
-        <div class="bg-gray-50 p-4 rounded-xl mb-6">
-            <p class="text-gray-700 text-sm" x-text="detailItem?.deskripsi"></p>
-            <p class="text-green-600 font-bold mt-2">
-                Rp <span x-text="(detailItem?.harga * (selectedWeight / 5)).toLocaleString()"></span>
-            </p>
-        </div>
-        
-        <button @click="addToCart({...detailItem, harga: detailItem.harga * (selectedWeight/5), nama: detailItem.nama + ' (' + selectedWeight + 'kg)'}); detailOpen = false" 
-                class="w-full bg-green-600 text-white py-3 rounded-2xl font-bold mb-2">
-            Masukkan Keranjang
-        </button>
-        <button @click="openCheckout(detailItem); detailOpen = false" class="w-full bg-green-600 text-white py-3 rounded-2xl font-bold mb-2">Beli Sekarang</button>
-        <button @click="detailOpen = false" class="w-full text-gray-400 font-bold">Tutup</button>
     </div>
-</div>
 
     <div x-show="checkoutOpen" x-cloak class="fixed inset-0 z-[210] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
         <div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl">
