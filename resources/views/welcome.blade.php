@@ -5,11 +5,7 @@
     detailOpen: false, selectedWeight: 5, weights: [5, 10, 25, 50],
     detailItem: null, 
     checkoutItem: null, checkoutOpen: false, 
-    // Mengasumsikan data profil ada di $store.profile
-    // Jika $store.profile.nama atau alamat kosong, dianggap belum lengkap
-    isProfileComplete: {{ (Auth::check() && Auth::user()->nama && Auth::user()->alamat) ? 'true' : 'false' }},
     
-    nama: '', alamat: '', no_hp: '',
     selectedCategory: null, sortBy: 'default',
     rawProducts: [],
     categories: [
@@ -29,14 +25,15 @@
     openDetail(product) { this.detailItem = product; this.selectedWeight = 5; this.detailOpen = true; },
     openCheckout(product) { this.checkoutItem = { ...product, qty: 1 }; this.checkoutOpen = true; },
     
-    // Fungsi validasi WhatsApp
     sendCheckoutWhatsApp() {
-        if (!this.isProfileComplete) {
-            alert('Mohon lengkapi profil Anda (Nama & Alamat) terlebih dahulu!');
-            window.location.href = '/profile'; // Ganti dengan route halaman profil Anda
+        if (!$store.profile.isComplete) {
+            alert('Mohon lengkapi profil Anda (Nama, Alamat, dan No HP) di menu Profil terlebih dahulu!');
+            $store.profile.open = true;
             return;
         }
-        let msg = 'Halo, saya ingin memesan ' + this.checkoutItem.nama + ' sebanyak ' + this.checkoutItem.qty;
+        let msg = 'Halo, saya ' + $store.profile.nama + ' dari ' + $store.profile.alamat + 
+                  '. Ingin memesan ' + this.checkoutItem.nama + ' sebanyak ' + this.checkoutItem.qty + 
+                  '. Kontak: ' + $store.profile.no_hp;
         window.open('https://wa.me/083196633554?text=' + encodeURIComponent(msg), '_blank');
     },
 
@@ -52,11 +49,23 @@
     }
 }" x-init="rawProducts = {{ json_encode($products) }}">
     
-    <header class="bg-gradient-to-r from-green-600 to-emerald-500 text-white py-12 shadow-lg">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl font-black mb-2">Penuhi Kebutuhan Dapur Tanpa Ribet</h2>
+    <div class="container mx-auto px-4 mt-8">
+        <div class="bg-gradient-to-r from-emerald-600 to-emerald-500 rounded-3xl p-6 shadow-xl flex items-center justify-between overflow-hidden relative min-h-[180px]">
+            
+            <div class="hidden md:flex w-40 h-full items-center justify-center">
+                <img src="{{ asset('images/banner-orang.png') }}" class="w-full h-auto object-contain" alt="Belanjaan">
+            </div>
+
+            <div class="text-center flex-1 px-6 text-white">
+                <h2 class="text-3xl md:text-4xl font-black mb-2">Belanja Dapur</h2>
+                <p class="font-bold text-emerald-50 text-lg">Penuhi kebutuhanmu tanpa ribet!</p>
+            </div>
+
+            <div class="hidden md:flex w-40 h-full items-center justify-center">
+                <img src="{{ asset('images/banner-keranjang.png') }}" class="w-full h-auto object-contain" alt="Keranjang Penuh">
+            </div>
         </div>
-    </header>
+    </div>
 
     <div class="container mx-auto px-4 py-8">
         <div class="relative flex flex-col items-center justify-center mb-6">
@@ -88,10 +97,7 @@
                     <img :src="'{{ asset('images/') }}/' + product.gambar" class="w-full aspect-square object-cover rounded-xl mb-3">
                     <h2 class="text-sm font-bold text-gray-800 truncate" x-text="product.nama"></h2>
                     <p class="text-emerald-700 font-black text-sm mb-3">Rp <span x-text="product.harga.toLocaleString('id-ID')"></span></p>
-                    
-                    <button type="button" 
-                            @click.stop="openCheckout(product)" 
-                            class="w-full bg-orange-500 text-white py-2 rounded-lg text-xs font-bold hover:bg-orange-600 transition relative z-20">
+                    <button type="button" @click.stop="openCheckout(product)" class="w-full bg-orange-500 text-white py-2 rounded-lg text-xs font-bold hover:bg-orange-600 transition relative z-20">
                         Beli Sekarang
                     </button>
                 </div>
@@ -110,8 +116,7 @@
                 <span class="font-black text-lg" x-text="checkoutItem?.qty"></span>
                 <button @click="checkoutItem.qty++" class="bg-emerald-600 text-white px-4 py-2 rounded-xl font-bold">+</button>
             </div>
-            <button @click="sendCheckoutWhatsApp()" 
-                    class="w-full bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition">
+            <button @click="sendCheckoutWhatsApp()" class="w-full bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition">
                 Pesan via WhatsApp
             </button>
         </div>
@@ -139,16 +144,20 @@
                         <p class="font-bold mb-2">Pilih Berat:</p>
                         <div class="grid grid-cols-4 gap-2">
                             <template x-for="w in weights" :key="w">
-                                <button type="button" @click="selectedWeight = w" 
-                                        :class="selectedWeight === w ? 'bg-emerald-600 text-white' : 'bg-white border border-green-200 hover:bg-green-100'" 
-                                        class="py-3 rounded-2xl font-bold transition" x-text="w + ' kg'">
-                                </button>
+                                <button type="button" @click="selectedWeight = w" :class="selectedWeight === w ? 'bg-emerald-600 text-white' : 'bg-white border border-green-200 hover:bg-green-100'" class="py-3 rounded-2xl font-bold transition" x-text="w + ' kg'"></button>
                             </template>
                         </div>
                     </div>
                     <div class="flex gap-3">
                         <button type="button" @click.stop="$store.cart.add({nama: detailItem.nama, finalPrice: (detailItem.kategori === 'Beras') ? (detailItem.harga * (selectedWeight / 5)) : detailItem.harga, gambar: detailItem.gambar, weight: (detailItem.kategori === 'Beras') ? selectedWeight : 0, qty: 1});" class="flex-1 bg-emerald-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-emerald-700 transition shadow-md">+ Keranjang</button>
-                        <button type="button" @click="let msg = 'Halo, saya ' + $store.profile.nama + ' dari ' + $store.profile.alamat + '. Ingin memesan ' + detailItem.nama + (detailItem.kategori === 'Beras' ? ' (' + selectedWeight + 'kg)' : '') + '. Kontak: ' + $store.profile.no_hp; window.open('https://wa.me/083196633554?text=' + encodeURIComponent(msg), '_blank');" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold text-sm hover:bg-green-600 transition shadow-md">WhatsApp</button>
+                        <button type="button" @click="
+                            if (!$store.profile.isComplete) {
+                                alert('Mohon lengkapi profil Anda terlebih dahulu!');
+                                $store.profile.open = true;
+                            } else {
+                                let msg = 'Halo, saya ' + $store.profile.nama + ' dari ' + $store.profile.alamat + '. Ingin memesan ' + detailItem.nama + (detailItem.kategori === 'Beras' ? ' (' + selectedWeight + 'kg)' : '') + '. Kontak: ' + $store.profile.no_hp; 
+                                window.open('https://wa.me/083196633554?text=' + encodeURIComponent(msg), '_blank');
+                            }" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold text-sm hover:bg-green-600 transition shadow-md">WhatsApp</button>
                     </div>
                 </div>
             </div>
