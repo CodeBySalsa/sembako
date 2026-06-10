@@ -49,23 +49,40 @@
     }
 }" x-init="rawProducts = {{ json_encode($products) }}">
     
-    <div class="container mx-auto px-4 mt-8">
+     <div class="container mx-auto px-4 mt-8">
+
         <div class="bg-gradient-to-r from-emerald-600 to-emerald-500 rounded-3xl p-6 shadow-xl flex items-center justify-between overflow-hidden relative min-h-[180px]">
-            
+
+           
+
             <div class="hidden md:flex w-40 h-full items-center justify-center">
-                <img src="{{ asset('images/banner-orang.png') }}" class="w-full h-auto object-contain" alt="Belanjaan">
+
+                <img src="{{ asset('images/orang_belanja-removebg-preview.png') }}" class="w-full h-full object-contain" alt="Ibu Belanja">
+
             </div>
+
+
 
             <div class="text-center flex-1 px-6 text-white">
+
                 <h2 class="text-3xl md:text-4xl font-black mb-2">Belanja Dapur</h2>
+
                 <p class="font-bold text-emerald-50 text-lg">Penuhi kebutuhanmu tanpa ribet!</p>
+
             </div>
 
+
+
             <div class="hidden md:flex w-40 h-full items-center justify-center">
-                <img src="{{ asset('images/banner-keranjang.png') }}" class="w-full h-auto object-contain" alt="Keranjang Penuh">
+
+                <img src="{{ asset('images/keranjang-removebg-preview.png') }}" class="w-full h-full object-contain" alt="Keranjang Sembako">
+
             </div>
+
         </div>
+
     </div>
+
 
     <div class="container mx-auto px-4 py-8">
         <div class="relative flex flex-col items-center justify-center mb-6">
@@ -102,6 +119,32 @@
                     </button>
                 </div>
             </template>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-12">
+        <h2 class="text-3xl font-black text-gray-800 mb-8 flex items-center gap-3">
+            <span class="text-emerald-600">💡</span> Artikel Sembako Terkini
+        </h2>
+        
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                <h3 class="font-bold text-lg text-gray-800 mb-2">Tips Memilih Beras Berkualitas</h3>
+                <p class="text-gray-600 text-sm mb-4">Pelajari cara membedakan beras asli dan kualitas premium agar masakan keluarga lebih lezat.</p>
+                <a href="#" class="text-emerald-600 font-bold text-sm hover:underline">Baca selengkapnya →</a>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                <h3 class="font-bold text-lg text-gray-800 mb-2">Manfaat Minyak Goreng Sehat</h3>
+                <p class="text-gray-600 text-sm mb-4">Daftar jenis minyak goreng yang lebih sehat untuk jantung dan cara penyimpanannya yang benar.</p>
+                <a href="#" class="text-emerald-600 font-bold text-sm hover:underline">Baca selengkapnya →</a>
+            </div>
+
+            <div class="bg-emerald-50 p-6 rounded-3xl border border-emerald-100 shadow-sm hover:shadow-md transition">
+                <h3 class="font-bold text-lg text-emerald-800 mb-2">Info Harga Sembako Nasional</h3>
+                <p class="text-emerald-700 text-sm mb-4">Cek update harga bahan pokok terkini dari website resmi pemantauan harga pasar.</p>
+                <a href="https://sp2kp.kemendag.go.id/" target="_blank" class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-700 transition">Kunjungi Website</a>
+            </div>
         </div>
     </div>
 
