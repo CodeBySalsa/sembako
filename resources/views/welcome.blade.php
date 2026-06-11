@@ -123,31 +123,115 @@
     </div>
 
     <div class="container mx-auto px-4 py-12">
-        <h2 class="text-3xl font-black text-gray-800 mb-8 flex items-center gap-3">
-            <span class="text-emerald-600">💡</span> Artikel Sembako Terkini
-        </h2>
-        
-        <div class="grid md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
-                <h3 class="font-bold text-lg text-gray-800 mb-2">Tips Memilih Beras Berkualitas</h3>
-                <p class="text-gray-600 text-sm mb-4">Pelajari cara membedakan beras asli dan kualitas premium agar masakan keluarga lebih lezat.</p>
-                <a href="#" class="text-emerald-600 font-bold text-sm hover:underline">Baca selengkapnya →</a>
-            </div>
+    <h2 class="text-3xl font-black text-gray-800 mb-8 flex items-center gap-3">
+        <span class="text-emerald-600">💡</span> Artikel Sembako Terkini
+    </h2>
 
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
-                <h3 class="font-bold text-lg text-gray-800 mb-2">Manfaat Minyak Goreng Sehat</h3>
-                <p class="text-gray-600 text-sm mb-4">Daftar jenis minyak goreng yang lebih sehat untuk jantung dan cara penyimpanannya yang benar.</p>
-                <a href="#" class="text-emerald-600 font-bold text-sm hover:underline">Baca selengkapnya →</a>
-            </div>
+    <!-- Baris 1 -->
+    <div class="grid md:grid-cols-3 gap-6">
 
-            <div class="bg-emerald-50 p-6 rounded-3xl border border-emerald-100 shadow-sm hover:shadow-md transition">
-                <h3 class="font-bold text-lg text-emerald-800 mb-2">Info Harga Sembako Nasional</h3>
-                <p class="text-emerald-700 text-sm mb-4">Cek update harga bahan pokok terkini dari website resmi pemantauan harga pasar.</p>
-                <a href="https://sp2kp.kemendag.go.id/" target="_blank" class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-700 transition">Kunjungi Website</a>
-            </div>
+        <a href="{{ url('/artikel/belanja-hemat') }}"
+   class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition block">
+
+    <h3 class="font-bold text-lg text-gray-800 mb-2">
+        Tips Belanja Sembako Lebih Hemat
+    </h3>
+
+    <p class="text-gray-600 text-sm mb-4">
+        Pelajari cara mengatur daftar belanja agar kebutuhan dapur terpenuhi tanpa boros.
+    </p>
+
+    <span class="text-emerald-600 font-bold text-sm">
+        Baca selengkapnya →
+    </span>
+
+</a>
+         <a href="{{ url('/artikel/menyimpan-beras') }}"
+   class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition block">
+
+    <h3 class="font-bold text-lg text-gray-800 mb-2">
+        Cara Menyimpan Beras Agar Awet
+    </h3>
+
+    <p class="text-gray-600 text-sm mb-4">
+        Simak tips menyimpan beras dengan benar agar tidak berkutu dan tahan lebih lama.
+    </p>
+
+    <span class="text-emerald-600 font-bold text-sm">
+        Baca selengkapnya →
+    </span>
+
+</a>
+
+        <div class="bg-emerald-50 p-6 rounded-3xl border border-emerald-100 shadow-sm hover:shadow-md transition">
+            <h3 class="font-bold text-lg text-emerald-800 mb-2">
+                Info Harga Sembako Nasional
+            </h3>
+            <p class="text-emerald-700 text-sm mb-4">
+                Cek update harga bahan pokok terkini dari website resmi pemantauan harga pasar.
+            </p>
+
+            <a href="https://sp2kp.kemendag.go.id/" target="_blank"
+               class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-700 transition">
+                Kunjungi Website
+            </a>
         </div>
+
+        <!-- Baris 2 -->
+    <a href="{{ url('/artikel/minyak-goreng') }}"
+   class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition block">
+
+    <h3 class="font-bold text-lg text-gray-800 mb-2">
+        Mengenal Jenis-Jenis Minyak Goreng
+    </h3>
+
+    <p class="text-gray-600 text-sm mb-4">
+        Ketahui perbedaan minyak goreng sawit, kelapa, dan minyak sehat lainnya.
+    </p>
+
+    <span class="text-emerald-600 font-bold text-sm">
+        Baca selengkapnya →
+    </span>
+
+</a>
+
+       <a href="{{ url('/artikel/mie-instan') }}"
+   class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition block">
+
+    <h3 class="font-bold text-lg text-gray-800 mb-2">
+       Tips Menyimpan Mie Instan dan Snack
+    </h3>
+
+    <p class="text-gray-600 text-sm mb-4">
+         Cara menjaga kualitas makanan kemasan agar tetap aman dikonsumsi.
+    </p>
+
+    <span class="text-emerald-600 font-bold text-sm">
+        Baca selengkapnya →
+    </span>
+
+</a>
+
+        <a href="{{ url('/artikel/belanja-bulanan') }}"
+   class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition block">
+
+    <h3 class="font-bold text-lg text-gray-800 mb-2">
+       Strategi Belanja Bulanan Keluarga
+    </h3>
+
+    <p class="text-gray-600 text-sm mb-4">
+          Atur anggaran sembako bulanan agar kebutuhan rumah tangga tetap terkendali.
+    </p>
+
+    <span class="text-emerald-600 font-bold text-sm">
+        Baca selengkapnya →
+    </span>
+
+</a>
+
     </div>
 
+    
     <div x-show="checkoutOpen" x-cloak class="fixed inset-0 z-[3000] bg-black/50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl relative" @click.away="checkoutOpen = false">
             <button @click="checkoutOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 font-black text-xl">✕</button>
