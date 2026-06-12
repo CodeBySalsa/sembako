@@ -68,11 +68,24 @@
         if (this.sortBy === 'low') list.sort((a, b) => a.harga - b.harga);
         if (this.sortBy === 'high') list.sort((a, b) => b.harga - a.harga);
         return list;
+    },
+
+    get searchResults() {
+        let q = $store.search.query.trim().toLowerCase();
+        if (!q) return [];
+        let list = this.rawProducts.map(p => ({
+            id: p.id, nama: p.nama_produk, harga: parseInt(p.harga),
+            kategori: p.kategori, gambar: p.gambar, stok: parseInt(p.stok || 0),
+            deskripsi: p.deskripsi || 'Belum ada deskripsi untuk produk ini.'
+        }));
+        return list.filter(p => 
+            p.nama.toLowerCase().includes(q) || p.kategori.toLowerCase().includes(q)
+        );
     }
 }" x-init="rawProducts = {{ json_encode($products) }}">
     
     {{-- HERO BANNER --}}
-<div class="container mx-auto px-4 mt-6">
+<div class="container mx-auto px-4 mt-6" x-show="!$store.search.query.trim()">
     <div class="bg-gradient-to-r from-emerald-600 to-emerald-500 rounded-3xl p-6 shadow-xl flex items-center justify-between overflow-hidden relative min-h-[140px] md:min-h-[180px]">
         
         <div class="hidden md:flex w-40 h-full items-center justify-center">
@@ -97,8 +110,48 @@
     </div>
 </div>
 
+    {{-- HASIL PENCARIAN --}}
+    <div x-show="$store.search.query.trim()" x-cloak class="container mx-auto px-4 py-6">
+        <div class="flex items-center justify-between mb-5">
+            <h2 class="text-xl md:text-3xl font-black text-gray-800 flex items-center gap-2">
+                <span class="text-emerald-600">🔍</span> 
+                Hasil Pencarian: "<span x-text="$store.search.query"></span>"
+            </h2>
+            <button @click="$store.search.query = ''" 
+                class="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl font-bold text-xs md:text-sm hover:bg-gray-200 transition flex-shrink-0">
+                ✕ Hapus
+            </button>
+        </div>
+
+        {{-- Jika ada hasil --}}
+        <div x-show="searchResults.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            <template x-for="product in searchResults" :key="product.id">
+                <div class="bg-green-50 rounded-2xl p-2 md:p-3 shadow-sm border border-green-100 flex flex-col relative cursor-pointer" @click="openDetail(product)">
+                    <div class="w-full aspect-square rounded-xl mb-2 overflow-hidden bg-white">
+                        <img :src="'{{ asset('images/') }}/' + product.gambar" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-emerald-600 font-bold text-[10px] md:text-xs mb-1" x-text="product.kategori"></p>
+                    <h2 class="text-xs md:text-sm font-bold text-gray-800 truncate mb-1" x-text="product.nama"></h2>
+                    <p class="text-emerald-700 font-black text-xs md:text-sm mb-2">Rp <span x-text="product.harga.toLocaleString('id-ID')"></span></p>
+                    <button type="button" @click.stop="openCheckout(product)" 
+                        class="w-full bg-orange-500 text-white py-1.5 rounded-lg text-xs font-bold hover:bg-orange-600 transition relative z-20">
+                        Beli Sekarang
+                    </button>
+                </div>
+            </template>
+        </div>
+
+        {{-- Jika tidak ada hasil --}}
+        <div x-show="searchResults.length === 0" class="text-center py-16">
+            <div class="text-5xl mb-3">😕</div>
+            <p class="text-gray-500 font-bold">Produk tidak ditemukan</p>
+            <p class="text-gray-400 text-sm mt-1">Coba kata kunci lain seperti nama produk atau kategori</p>
+        </div>
+    </div>
+
     {{-- KATEGORI --}}
-    <div class="container mx-auto px-4 py-6">
+    <div class="container mx-auto px-4 py-6" x-show="!$store.search.query.trim()" x-cloak>
         <div class="relative flex flex-col items-center justify-center mb-5">
             <h2 class="text-2xl md:text-3xl font-black text-gray-800 flex items-center gap-3 mb-4">
                 <span class="text-emerald-600">📋</span> 
@@ -149,7 +202,7 @@
 
 
     {{-- ARTIKEL --}}
-<div x-show="!selectedCategory" x-cloak class="container mx-auto px-4 pb-8 pt-4">
+<div x-show="!selectedCategory && !$store.search.query.trim()" x-cloak class="container mx-auto px-4 pb-8 pt-4">
         <h2 class="text-xl md:text-3xl font-black text-gray-800 mb-4 flex items-center gap-2">
             <span class="text-emerald-600">💡</span> Artikel Sembako Terkini
         </h2>

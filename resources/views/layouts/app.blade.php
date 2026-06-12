@@ -26,15 +26,27 @@
 
     {{-- NAVBAR --}}
     <nav class="bg-white shadow-lg border-b border-emerald-100 sticky top-0 z-[500] w-full">
-        <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-between items-center gap-3">
             
             {{-- LOGO --}}
-            <h1 class="text-lg md:text-2xl font-black text-emerald-600 tracking-tight">
+            <h1 class="text-lg md:text-2xl font-black text-emerald-600 tracking-tight flex-shrink-0">
                 SEMBAKO<span class="text-gray-800">KITA</span>
             </h1>
 
+            {{-- SEARCH BOX DESKTOP --}}
+            <div class="relative flex-1 max-w-md hidden md:block">
+                <input type="text" x-model="$store.search.query" 
+                       placeholder="Cari produk atau kategori (contoh: beras, kecap, minyak)..." 
+                       class="w-full border-2 border-emerald-100 rounded-xl pl-10 pr-10 py-2 text-sm focus:outline-none focus:border-emerald-400 transition">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+                <button x-show="$store.search.query" @click="$store.search.query = ''" 
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 font-bold">
+                    ✕
+                </button>
+            </div>
+
             {{-- MENU DESKTOP --}}
-            <div class="hidden md:flex items-center gap-4">
+            <div class="hidden md:flex items-center gap-4 flex-shrink-0">
                 <a href="/" class="flex items-center gap-2 font-bold text-gray-700 hover:text-emerald-600 transition">
                     <span>🏠</span> Beranda
                 </a>
@@ -119,6 +131,20 @@
             </div>
 
         </div>
+
+        {{-- SEARCH BOX MOBILE (baris terpisah di bawah navbar) --}}
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" x-model="$store.search.query" 
+                       placeholder="Cari produk atau kategori..." 
+                       class="w-full border-2 border-emerald-100 rounded-xl pl-10 pr-10 py-2 text-sm focus:outline-none focus:border-emerald-400 transition">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+                <button x-show="$store.search.query" @click="$store.search.query = ''" 
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 font-bold">
+                    ✕
+                </button>
+            </div>
+        </div>
     </nav>
 
     {{-- MODAL PROFIL --}}
@@ -155,7 +181,7 @@
         {{-- List item scrollable --}}
         <div class="overflow-y-auto flex-1 px-5" style="-webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
             <div class="space-y-3">
-                <template x-for="(item, index) in $store.cart.items" :key="index">
+                <template x-for="(item, index) in $store.cart.items" :key="item.id + '-' + item.weight + '-' + index">
                     <div class="border-b py-3 flex items-center gap-3">
                         <img :src="'{{ asset('images/') }}/' + item.gambar" class="w-12 h-12 md:w-14 md:h-14 object-cover rounded-xl border border-gray-100 flex-shrink-0">
                         <div class="flex-1 min-w-0">
@@ -254,7 +280,10 @@
             },
             updateQty(index, change) {
                 this.items[index].qty += change;
-                if (this.items[index].qty < 1) this.items.splice(index, 1);
+                if (this.items[index].qty < 1) {
+                    this.items.splice(index, 1);
+                }
+                this.items = [...this.items];
                 this.save();
             }
         });
@@ -275,6 +304,10 @@
             get isComplete() {
                 return this.nama !== '' && this.alamat !== '' && this.no_hp !== '';
             }
+        });
+
+        Alpine.store('search', {
+            query: ''
         });
     });
     </script>

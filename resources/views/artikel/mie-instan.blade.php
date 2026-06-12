@@ -10,7 +10,7 @@
              alt="Belanja Hemat"
              class="w-full max-h-[500px] object-contain bg-green-50">
 
-        <div class="p-8">
+        <div class="p-4 md:p-8">
 
             <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
                 <span>📅 11 Juni 2026</span>
@@ -18,7 +18,7 @@
                 <span>SembakoKita</span>
             </div>
 
-            <h1 class="text-4xl font-black text-gray-800 mb-6">
+           <h1 class="text-2xl md:text-4xl font-black text-gray-800 mb-6">
                Tips Menyimpan Mie Instan dan Makanan Kemasan dengan Benar
             </h1>
 
