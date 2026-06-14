@@ -21,7 +21,7 @@
          x-transition:enter-start="opacity-0 transform translate-x-10"
          x-transition:enter-end="opacity-100 transform translate-x-0"
          class="fixed top-20 right-3 z-[99999] bg-emerald-600 text-white px-4 py-3 rounded-2xl shadow-xl font-bold text-sm">
-        ✅ Berhasil ditambahkan ke keranjang!
+        Berhasil ditambahkan ke keranjang!
     </div>
 
     {{-- NAVBAR --}}
@@ -164,82 +164,82 @@
     </div>
 
     {{-- MODAL KERANJANG --}}
-<div x-show="$store.cart.open" x-cloak 
-     x-effect="$store.cart.open ? document.body.classList.add('modal-open') : document.body.classList.remove('modal-open')"
-     class="fixed inset-0 z-[1000] flex items-end md:items-center justify-center p-0 md:p-4 bg-black/60 backdrop-blur-sm">
-    
-    <div class="bg-white w-full md:max-w-lg rounded-t-3xl md:rounded-3xl shadow-2xl flex flex-col"
-         style="max-height: 85vh;"
-         @click.away="$store.cart.open = false">
+    <div x-show="$store.cart.open" x-cloak 
+         x-effect="$store.cart.open ? document.body.classList.add('modal-open') : document.body.classList.remove('modal-open')"
+         class="fixed inset-0 z-[1000] flex items-end md:items-center justify-center p-0 md:p-4 bg-black/60 backdrop-blur-sm">
         
-        {{-- Header --}}
-        <div class="flex items-center justify-between px-5 pt-5 pb-3 flex-shrink-0">
-            <h2 class="text-xl md:text-2xl font-black">Keranjang Anda</h2>
-            <button @click="$store.cart.open = false" class="text-gray-400 hover:text-red-500 font-black text-xl">✕</button>
-        </div>
-
-        {{-- List item scrollable --}}
-        <div class="overflow-y-auto flex-1 px-5" style="-webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
-            <div class="space-y-3">
-                <template x-for="(item, index) in $store.cart.items" :key="item.id + '-' + item.weight + '-' + index">
-                    <div class="border-b py-3 flex items-center gap-3">
-                        <img :src="'{{ asset('images/') }}/' + item.gambar" class="w-12 h-12 md:w-14 md:h-14 object-cover rounded-xl border border-gray-100 flex-shrink-0">
-                        <div class="flex-1 min-w-0">
-                            <p class="font-bold text-xs md:text-sm truncate" x-text="item.nama"></p>
-                            <p class="text-xs md:text-sm text-emerald-600 font-bold">Rp <span x-text="(item.finalPrice * item.qty).toLocaleString('id-ID')"></span></p>
-                        </div>
-                        <div class="flex items-center gap-1 md:gap-2 flex-shrink-0">
-                            <button @click="$store.cart.updateQty(index, -1)" class="bg-gray-200 px-2 md:px-3 py-1 rounded-lg font-bold hover:bg-gray-300 text-sm">-</button>
-                            <span class="font-bold w-5 text-center text-sm" x-text="item.qty"></span>
-                            <button @click="$store.cart.updateQty(index, 1)" class="bg-emerald-600 text-white px-2 md:px-3 py-1 rounded-lg font-bold hover:bg-emerald-700 text-sm">+</button>
-                        </div>
-                    </div>
-                </template>
-                <p x-show="$store.cart.items.length === 0" class="text-gray-400 py-4 italic text-sm">Keranjang kosong</p>
+        <div class="bg-white w-full md:max-w-lg rounded-t-3xl md:rounded-3xl shadow-2xl flex flex-col"
+             style="max-height: 85vh;"
+             @click.away="$store.cart.open = false">
+            
+            {{-- Header --}}
+            <div class="flex items-center justify-between px-5 pt-5 pb-3 flex-shrink-0">
+                <h2 class="text-xl md:text-2xl font-black">Keranjang Anda</h2>
+                <button @click="$store.cart.open = false" class="text-gray-400 hover:text-red-500 font-black text-xl">✕</button>
             </div>
 
-            <div x-show="$store.cart.items.length > 0" class="mt-3 pt-3 border-t border-gray-200 pb-2">
-                <p class="font-black text-base md:text-lg text-gray-800">Total: Rp <span x-text="$store.cart.items.reduce((sum, item) => sum + (item.finalPrice * item.qty), 0).toLocaleString('id-ID')"></span></p>
-            </div>
-        </div>
+            {{-- List item scrollable --}}
+            <div class="overflow-y-auto flex-1 px-5" style="-webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
+                <div class="space-y-3">
+                    <template x-for="(item, index) in $store.cart.items" :key="item.id + '-' + item.weight + '-' + index">
+                        <div class="border-b py-3 flex items-center gap-3">
+                            <img :src="'{{ asset('images/') }}/' + item.gambar" class="w-12 h-12 md:w-14 md:h-14 object-cover rounded-xl border border-gray-100 flex-shrink-0">
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-xs md:text-sm truncate" x-text="item.nama"></p>
+                                <p class="text-xs md:text-sm text-emerald-600 font-bold">Rp <span x-text="(item.finalPrice * item.qty).toLocaleString('id-ID')"></span></p>
+                            </div>
+                            <div class="flex items-center gap-1 md:gap-2 flex-shrink-0">
+                                <button @click="$store.cart.updateQty(index, -1)" class="bg-gray-200 px-2 md:px-3 py-1 rounded-lg font-bold hover:bg-gray-300 text-sm">-</button>
+                                <span class="font-bold w-5 text-center text-sm" x-text="item.qty"></span>
+                                <button @click="$store.cart.updateQty(index, 1)" class="bg-emerald-600 text-white px-2 md:px-3 py-1 rounded-lg font-bold hover:bg-emerald-700 text-sm">+</button>
+                            </div>
+                        </div>
+                    </template>
+                    <p x-show="$store.cart.items.length === 0" class="text-gray-400 py-4 italic text-sm">Keranjang kosong</p>
+                </div>
 
-        {{-- Tombol di tengah bawah --}}
-        <div class="flex flex-col gap-2 px-5 py-4 flex-shrink-0">
-            <button @click="
-                if (!$store.profile.isComplete) {
-                    alert('Mohon lengkapi profil Anda terlebih dahulu!');
-                    $store.profile.open = true;
-                } else {
-                    let waktu = new Date().getHours();
-                    let salam = waktu < 11 ? 'pagi' : waktu < 15 ? 'siang' : waktu < 18 ? 'sore' : 'malam';
-                    let nomorList = $store.cart.items.map((i, idx) => 
-                        (idx+1) + '. ' + i.nama + ' — ' + i.qty + 'x @ Rp ' + i.finalPrice.toLocaleString('id-ID') + ' = Rp ' + (i.finalPrice * i.qty).toLocaleString('id-ID')
-                    ).join('\n');
-                    let total = $store.cart.items.reduce((sum, item) => sum + (item.finalPrice * item.qty), 0);
-                    let msg = 
-                        'Halo! 👋 Selamat ' + salam + ', Admin SembakoKita!\n\n' +
-                        'Saya ingin memesan beberapa produk berikut:\n\n' +
-                        '🛒 Daftar Pesanan:\n' + nomorList + '\n\n' +
-                        '💰 Total Belanja: Rp ' + total.toLocaleString('id-ID') + '\n\n' +
-                        '👤 Nama     : ' + $store.profile.nama + '\n' +
-                        '📍 Alamat   : ' + $store.profile.alamat + '\n' +
-                        '📱 No. HP   : ' + $store.profile.no_hp + '\n\n' +
-                        'Mohon konfirmasi ketersediaan stok dan info pengirimannya ya, Admin. Terima kasih! 🙏';
-                    
-                    $store.cart.items.forEach(item => $store.cart.kirimKeDatabase(item));
-                    window.open('https://wa.me/6283196633554?text=' + encodeURIComponent(msg), '_blank');
-                    $store.cart.clear();
-                    $store.cart.open = false;
-                }
-            " class="w-full bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition">
-                Pesan via WhatsApp
-            </button>
-            <button @click="$store.cart.open = false" class="w-full bg-gray-100 py-3 rounded-xl font-bold hover:bg-gray-200 transition">
-                Lanjut Belanja
-            </button>
+                <div x-show="$store.cart.items.length > 0" class="mt-3 pt-3 border-t border-gray-200 pb-2">
+                    <p class="font-black text-base md:text-lg text-gray-800">Total: Rp <span x-text="$store.cart.items.reduce((sum, item) => sum + (item.finalPrice * item.qty), 0).toLocaleString('id-ID')"></span></p>
+                </div>
+            </div>
+
+            {{-- Tombol di bawah --}}
+            <div class="flex flex-col gap-2 px-5 py-4 flex-shrink-0">
+                <button @click="
+                    if (!$store.profile.isComplete) {
+                        alert('Mohon lengkapi profil Anda terlebih dahulu!');
+                        $store.profile.open = true;
+                    } else {
+                        let waktu = new Date().getHours();
+                        let salam = waktu < 11 ? 'pagi' : waktu < 15 ? 'siang' : waktu < 18 ? 'sore' : 'malam';
+                        let nomorList = $store.cart.items.map((i, idx) => 
+                            (idx+1) + '. ' + i.nama + ' - ' + i.qty + 'x @ Rp ' + i.finalPrice.toLocaleString('id-ID') + ' = Rp ' + (i.finalPrice * i.qty).toLocaleString('id-ID')
+                        ).join('\n');
+                        let total = $store.cart.items.reduce((sum, item) => sum + (item.finalPrice * item.qty), 0);
+                        let msg = 
+                            'Halo! Selamat ' + salam + ', Admin SembakoKita!\n\n' +
+                            'Saya ingin memesan beberapa produk berikut:\n\n' +
+                            'Daftar Pesanan:\n' + nomorList + '\n\n' +
+                            'Total Belanja: Rp ' + total.toLocaleString('id-ID') + '\n\n' +
+                            'Nama     : ' + $store.profile.nama + '\n' +
+                            'Alamat   : ' + $store.profile.alamat + '\n' +
+                            'No. HP   : ' + $store.profile.no_hp + '\n\n' +
+                            'Mohon konfirmasi ketersediaan stok dan info pengirimannya ya, Admin. Terima kasih!';
+                        
+                        $store.cart.items.forEach(item => $store.cart.kirimKeDatabase(item));
+                        window.open('https://wa.me/6283196633554?text=' + encodeURIComponent(msg), '_blank');
+                        $store.cart.clear();
+                        $store.cart.open = false;
+                    }
+                " class="w-full bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition">
+                    Pesan via WhatsApp
+                </button>
+                <button @click="$store.cart.open = false" class="w-full bg-gray-100 py-3 rounded-xl font-bold hover:bg-gray-200 transition">
+                    Lanjut Belanja
+                </button>
+            </div>
         </div>
     </div>
-</div>
 
     <main class="relative z-[1]">
         @yield('content')

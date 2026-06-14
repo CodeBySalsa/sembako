@@ -33,31 +33,31 @@
     },
     
     sendCheckoutWhatsApp() {
-        if (!$store.profile.isComplete) {
-            alert('Mohon lengkapi profil Anda (Nama, Alamat, dan No HP) di menu Profil terlebih dahulu!');
-            $store.profile.open = true;
-            return;
-        }
-        let subtotal = this.checkoutItem.harga * this.checkoutItem.qty;
-        let waktu = new Date().getHours();
-        let salam = waktu < 11 ? 'pagi' : waktu < 15 ? 'siang' : waktu < 18 ? 'sore' : 'malam';
-        let msg = 
-            'Halo! 👋 Selamat ' + salam + ', Admin SembakoKita!\n\n' +
-            'Saya ingin melakukan pemesanan produk berikut:\n\n' +
-            '🛍 Produk   : ' + this.checkoutItem.nama + '\n' +
-            '💰 Harga    : Rp ' + this.checkoutItem.harga.toLocaleString('id-ID') + '\n' +
-            '📦 Jumlah   : ' + this.checkoutItem.qty + ' pcs\n' +
-            '💵 Subtotal : Rp ' + subtotal.toLocaleString('id-ID') + '\n\n' +
-            '👤 Nama     : ' + $store.profile.nama + '\n' +
-            '📍 Alamat   : ' + $store.profile.alamat + '\n' +
-            '📱 No. HP   : ' + $store.profile.no_hp + '\n\n' +
-            'Mohon konfirmasi ketersediaan stok dan info pengirimannya ya, Admin. Terima kasih! 🙏';
-        
-        window.open('https://wa.me/6283196633554?text=' + encodeURIComponent(msg), '_blank');
-        this.reduceStock(this.checkoutItem.id, this.checkoutItem.qty);
-        $store.cart.kirimKeDatabase({id: this.checkoutItem.id, qty: this.checkoutItem.qty});
-        this.checkoutOpen = false;
-    },
+    if (!$store.profile.isComplete) {
+        alert('Mohon lengkapi profil Anda (Nama, Alamat, dan No HP) di menu Profil terlebih dahulu!');
+        $store.profile.open = true;
+        return;
+    }
+    let subtotal = this.checkoutItem.harga * this.checkoutItem.qty;
+    let waktu = new Date().getHours();
+    let salam = waktu < 11 ? 'pagi' : waktu < 15 ? 'siang' : waktu < 18 ? 'sore' : 'malam';
+    let msg = 
+        'Halo! Selamat ' + salam + ', Admin SembakoKita!\n\n' +
+        'Saya ingin melakukan pemesanan produk berikut:\n\n' +
+        'Produk   : ' + this.checkoutItem.nama + '\n' +
+        'Harga    : Rp ' + this.checkoutItem.harga.toLocaleString('id-ID') + '\n' +
+        'Jumlah   : ' + this.checkoutItem.qty + ' pcs\n' +
+        'Subtotal : Rp ' + subtotal.toLocaleString('id-ID') + '\n\n' +
+        'Nama     : ' + $store.profile.nama + '\n' +
+        'Alamat   : ' + $store.profile.alamat + '\n' +
+        'No. HP   : ' + $store.profile.no_hp + '\n\n' +
+        'Mohon konfirmasi ketersediaan stok dan info pengirimannya ya, Admin. Terima kasih!';
+    
+    window.open('https://wa.me/6283196633554?text=' + encodeURIComponent(msg), '_blank');
+    this.reduceStock(this.checkoutItem.id, this.checkoutItem.qty);
+    $store.cart.kirimKeDatabase({id: this.checkoutItem.id, qty: this.checkoutItem.qty});
+    this.checkoutOpen = false;
+},
 
     get filteredProducts() {
         let list = this.rawProducts.map(p => ({
